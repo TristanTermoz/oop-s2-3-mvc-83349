@@ -15,7 +15,9 @@
             <td>@s.Name</td>
             <td>@s.Email</td>
             <td>@s.Phone</td>
-            <td><!-- future actions --></td>
+            <td>
+                <a class="btn btn-primary" asp-action="EditStudent" asp-route-id="@s.Id">Edit</a>
+            </td>
         </tr>
     }
     </tbody>

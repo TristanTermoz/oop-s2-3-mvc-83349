@@ -87,6 +87,62 @@ namespace VgcCollege.Controllers
             return RedirectToAction("Students");
         }
 
+        public async Task<IActionResult> EditStudent(int id)
+        {
+            var student = await _db.StudentProfiles.FindAsync(id);
+            if (student == null) return NotFound();
+
+            var model = new Models.StudentEditViewModel
+            {
+                Id = student.Id,
+                Email = student.Email,
+                Name = student.Name,
+                Phone = student.Phone,
+                Address = student.Address,
+                DateOfBirth = student.DateOfBirth,
+                StudentNumber = student.StudentNumber,
+                SelectedCourseIds = await _db.CourseEnrolments.Where(e => e.StudentProfileId == student.Id).Select(e => e.CourseId).ToArrayAsync()
+            };
+
+            ViewData["Courses"] = await _db.Courses.AsNoTracking().ToListAsync();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditStudent(Models.StudentEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewData["Courses"] = await _db.Courses.AsNoTracking().ToListAsync();
+                return View(model);
+            }
+
+            var student = await _db.StudentProfiles.FindAsync(model.Id);
+            if (student == null) return NotFound();
+
+            student.Name = model.Name;
+            student.Email = model.Email;
+            student.Phone = model.Phone;
+            student.Address = model.Address;
+            student.DateOfBirth = model.DateOfBirth ?? DateTime.MinValue;
+            student.StudentNumber = model.StudentNumber;
+
+            // update enrolments
+            var current = await _db.CourseEnrolments.Where(e => e.StudentProfileId == student.Id).ToListAsync();
+            _db.CourseEnrolments.RemoveRange(current);
+            if (model.SelectedCourseIds != null)
+            {
+                foreach (var cid in model.SelectedCourseIds)
+                {
+                    _db.CourseEnrolments.Add(new Models.CourseEnrolment { CourseId = cid, StudentProfileId = student.Id, EnrolDate = DateTime.Today, Status = "Active" });
+                }
+            }
+
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Students");
+        }
+
         public async Task<IActionResult> Index()
         {
             var users = await _userManager.Users.ToListAsync();
