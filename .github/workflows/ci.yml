@@ -26,8 +26,45 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
 
-    - name: Test
-      run: dotnet test --configuration Release --no-build --verbosity normal
+    - name: Test (with coverage)
+      run: dotnet test --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./TestResults
+
+    - name: Upload test results and coverage
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: ./TestResults
+
+    - name: Upload coverage XML artifact
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-xml
+        path: |
+          ./TestResults/**/coverage.cobertura.xml
+
+    - name: Install reportgenerator
+      run: |
+        dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.1.8
+        export PATH="$PATH:$HOME/.dotnet/tools"
+
+    - name: Generate HTML coverage report
+      run: |
+        mkdir -p coverage-report
+        REPORTS=$(ls ./TestResults/**/coverage.cobertura.xml 2>/dev/null || true)
+        if [ -z "$REPORTS" ]; then
+          echo "No coverage report found"
+        else
+          reportgenerator -reports:"./TestResults/**/coverage.cobertura.xml" -targetdir:coverage-report -reporttypes:Html
+        fi
+
+    - name: Upload coverage HTML artifact
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: ./coverage-report
 
     - name: Publish site
       run: dotnet publish VgcCollege/VgcCollege.csproj -c Release -o ./publish
