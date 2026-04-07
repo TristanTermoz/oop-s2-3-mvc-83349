@@ -1,0 +1,56 @@
+@model VgcCollege.Models.StudentProfile
+
+@{
+    ViewData["Title"] = "Student Details";
+}
+
+<h2>@Model.Name</h2>
+<p>Email: @Model.Email</p>
+<p>Phone: @Model.Phone</p>
+
+<h3>Assignment Results</h3>
+@if (ViewData["AssignmentResults"] is IEnumerable<VgcCollege.Models.AssignmentResult> ar && ar.Any())
+{
+    <table class="table">
+        <thead><tr><th>Assignment</th><th>Score</th><th>Feedback</th><th>Actions</th></tr></thead>
+        <tbody>
+        @foreach(var r in ar)
+        {
+            <tr>
+                <td>@r.Assignment?.Title</td>
+                <td>@r.Score</td>
+                <td>@r.Feedback</td>
+                <td><a asp-action="EditAssignmentResult" asp-route-id="@r.Id" class="btn btn-primary">Edit</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No assignment results.</p>
+}
+
+<h3>Exam Results</h3>
+@if (ViewData["ExamResults"] is IEnumerable<VgcCollege.Models.ExamResult> er && er.Any())
+{
+    <table class="table">
+        <thead><tr><th>Exam</th><th>Score</th><th>Grade</th></tr></thead>
+        <tbody>
+        @foreach(var ex in er)
+        {
+            <tr>
+                <td>@ex.Exam?.Title</td>
+                <td>@ex.Score</td>
+                <td>@ex.Grade</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No exam results.</p>
+}
+
+<p><a asp-action="CreateAssignmentResult" asp-route-assignmentId="@(ViewData["AssignmentResults"] is IEnumerable<VgcCollege.Models.AssignmentResult> list && list.Any() ? list.First().AssignmentId : 0)" asp-route-studentId="@Model.Id" class="btn btn-primary">Add Result</a></p>

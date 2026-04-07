@@ -1,0 +1,25 @@
+@model VgcCollege.Models.AssignmentResult
+
+@{
+    ViewData["Title"] = "Create Assignment Result";
+}
+
+<h2>Create Assignment Result</h2>
+<form method="post">
+    @Html.AntiForgeryToken()
+    <input asp-for="AssignmentId" type="hidden" />
+    <input asp-for="StudentProfileId" type="hidden" />
+    <div>
+        <label>Assignment name (optional)</label>
+        <input name="Assignment.Title" value="@(ViewData["AssignmentTitle"] ?? "")" />
+    </div>
+    <div>
+        <label asp-for="Score"></label>
+        <input asp-for="Score" />
+    </div>
+    <div>
+        <label asp-for="Feedback"></label>
+        <textarea asp-for="Feedback"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

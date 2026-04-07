@@ -1,0 +1,21 @@
+@{
+    ViewData["Title"] = "Create Enrolment";
+}
+
+<h2>Create Enrolment</h2>
+<form method="post">
+    @Html.AntiForgeryToken()
+    <div>
+        <label>Course</label>
+        <select name="courseId">
+        @foreach(var c in (IEnumerable<VgcCollege.Models.Course>)ViewData["Courses"]) { <option value="@c.Id">@c.Name</option> }
+        </select>
+    </div>
+    <div>
+        <label>Student</label>
+        <select name="studentId">
+        @foreach(var s in (IEnumerable<VgcCollege.Models.StudentProfile>)ViewData["Students"]) { <option value="@s.Id">@s.Name</option> }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Enrol</button>
+</form>

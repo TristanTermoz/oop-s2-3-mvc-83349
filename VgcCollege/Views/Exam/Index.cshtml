@@ -1,0 +1,28 @@
+@model IEnumerable<VgcCollege.Models.Exam>
+
+@{
+    ViewData["Title"] = "Manage Exams";
+}
+
+<h2>Exams</h2>
+<p><a asp-action="Create">Create new exam</a></p>
+<table class="table">
+    <thead><tr><th>Title</th><th>Course</th><th>Released</th><th>Actions</th></tr></thead>
+    <tbody>
+    @foreach(var e in Model)
+    {
+        <tr>
+            <td>@e.Title</td>
+            <td>@e.Course?.Name</td>
+            <td>@e.ResultsReleased</td>
+            <td>
+                <form asp-action="Release" method="post" style="display:inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@e.Id" />
+                    <button type="submit" class="btn btn-sm btn-success">Release</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

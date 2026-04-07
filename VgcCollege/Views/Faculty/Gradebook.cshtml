@@ -1,0 +1,22 @@
+@model IEnumerable<VgcCollege.Models.AssignmentResult>
+
+@{
+    ViewData["Title"] = "Gradebook";
+}
+
+<h2>Gradebook</h2>
+<table class="table">
+    <thead><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Feedback</th><th>Actions</th></tr></thead>
+    <tbody>
+    @foreach(var r in Model)
+    {
+        <tr>
+            <td>@r.Student?.Name</td>
+            <td>@r.Assignment?.Title</td>
+            <td>@r.Score</td>
+            <td>@r.Feedback</td>
+            <td><a asp-action="EditAssignmentResult" asp-route-id="@r.Id" class="btn btn-primary">Edit</a></td>
+        </tr>
+    }
+    </tbody>
+</table>

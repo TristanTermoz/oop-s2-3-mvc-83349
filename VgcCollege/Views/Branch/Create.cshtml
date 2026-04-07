@@ -1,0 +1,19 @@
+@model VgcCollege.Models.Branch
+
+@{
+    ViewData["Title"] = "Create Branch";
+}
+
+<h2>Create Branch</h2>
+<form method="post">
+    @Html.AntiForgeryToken()
+    <div>
+        <label asp-for="Name"></label>
+        <input asp-for="Name" />
+    </div>
+    <div>
+        <label asp-for="Address"></label>
+        <input asp-for="Address" />
+    </div>
+    <button type="submit">Create</button>
+</form>

@@ -1,0 +1,58 @@
+@model VgcCollege.Models.FacultyDashboardViewModel
+
+@{
+    ViewData["Title"] = "Faculty Dashboard";
+}
+
+<h2>Faculty Dashboard</h2>
+
+<div class="mb-3">
+    <a class="btn btn-primary" asp-action="Students">Students</a>
+    <a class="btn btn-primary" asp-action="Gradebook">Gradebook</a>
+    <a class="btn btn-primary" asp-action="ExamResults">Exam Results</a>
+</div>
+
+<h3>Your Courses</h3>
+@if (Model.Courses != null && Model.Courses.Any())
+{
+    <ul>
+    @foreach(var c in Model.Courses)
+    {
+        <li>@c.Name - Enrolled: @c.Enrolments?.Count()</li>
+    }
+    </ul>
+}
+else
+{
+    <p>No courses assigned.</p>
+}
+
+<h3>Your Students</h3>
+@if (Model.Enrolments != null && Model.Enrolments.Any())
+{
+    <ul>
+    @foreach(var e in Model.Enrolments)
+    {
+        <li>@e.Student?.Name - @e.Course?.Name</li>
+    }
+    </ul>
+}
+else
+{
+    <p>No students.</p>
+}
+
+<h3>Gradebook Entries</h3>
+@if (Model.AssignmentResults != null && Model.AssignmentResults.Any())
+{
+    <ul>
+    @foreach(var r in Model.AssignmentResults)
+    {
+        <li>@r.Student?.Name - @r.Assignment?.Title - @r.Score</li>
+    }
+    </ul>
+}
+else
+{
+    <p>No results.</p>
+}

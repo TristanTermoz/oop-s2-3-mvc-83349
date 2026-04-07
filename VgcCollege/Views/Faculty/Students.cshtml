@@ -1,0 +1,22 @@
+@model IEnumerable<VgcCollege.Models.CourseEnrolment>
+
+@{
+    ViewData["Title"] = "Students";
+}
+
+<h2>Students in your courses</h2>
+<table class="table">
+    <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Course</th><th>Actions</th></tr></thead>
+    <tbody>
+    @foreach(var e in Model)
+    {
+        <tr>
+            <td>@e.Student?.Name</td>
+            <td>@e.Student?.Email</td>
+            <td>@e.Student?.Phone</td>
+            <td>@e.Course?.Name</td>
+            <td><a asp-action="StudentDetails" asp-route-id="@e.StudentProfileId" class="btn btn-primary">Details</a></td>
+        </tr>
+    }
+    </tbody>
+</table>

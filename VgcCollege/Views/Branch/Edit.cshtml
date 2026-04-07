@@ -1,0 +1,20 @@
+@model VgcCollege.Models.Branch
+
+@{
+    ViewData["Title"] = "Edit Branch";
+}
+
+<h2>Edit Branch</h2>
+<form method="post">
+    @Html.AntiForgeryToken()
+    <input asp-for="Id" type="hidden" />
+    <div>
+        <label asp-for="Name"></label>
+        <input asp-for="Name" />
+    </div>
+    <div>
+        <label asp-for="Address"></label>
+        <input asp-for="Address" />
+    </div>
+    <button type="submit">Save</button>
+</form>

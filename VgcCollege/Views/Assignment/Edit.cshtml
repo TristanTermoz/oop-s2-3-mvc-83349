@@ -1,0 +1,28 @@
+@model VgcCollege.Models.Assignment
+
+@{
+    ViewData["Title"] = "Edit Assignment";
+}
+
+<h2>Edit Assignment</h2>
+<form method="post">
+    @Html.AntiForgeryToken()
+    <input asp-for="Id" type="hidden" />
+    <div>
+        <label asp-for="Title"></label>
+        <input asp-for="Title" />
+    </div>
+    <div>
+        <label asp-for="CourseId">Course</label>
+        <select asp-for="CourseId" asp-items='@(new Microsoft.AspNetCore.Mvc.Rendering.SelectList((IEnumerable<VgcCollege.Models.Course>)ViewData["Courses"], "Id", "Name"))'></select>
+    </div>
+    <div>
+        <label asp-for="MaxScore"></label>
+        <input asp-for="MaxScore" />
+    </div>
+    <div>
+        <label asp-for="DueDate"></label>
+        <input asp-for="DueDate" type="date" />
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

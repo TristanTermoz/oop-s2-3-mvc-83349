@@ -1,0 +1,57 @@
+@model VgcCollege.Models.StudentDashboardViewModel
+
+@{
+    ViewData["Title"] = "Student Dashboard";
+}
+
+<h2>Student Dashboard</h2>
+
+@if (Model.Student != null)
+{
+    <div class="d-flex align-items-center">
+        <h3 class="me-3">@Model.Student.Name</h3>
+        <a class="btn btn-primary" asp-action="EditProfile">Edit Profile</a>
+    </div>
+    <p>Email: @Model.Student.Email</p>
+    <p>Phone: @Model.Student.Phone</p>
+
+    <h4>Enrolments</h4>
+    @if (Model.Enrolments != null && Model.Enrolments.Any())
+    {
+        <ul>
+        @foreach(var e in Model.Enrolments)
+        {
+            <li>@e.Course?.Name - Status: @e.Status</li>
+        }
+        </ul>
+    }
+    else { <p>No enrolments.</p> }
+
+    <h4>Assignment Results</h4>
+    @if (Model.AssignmentResults != null && Model.AssignmentResults.Any())
+    {
+        <ul>
+        @foreach(var r in Model.AssignmentResults)
+        {
+            <li>@r.Assignment?.Title - @r.Score</li>
+        }
+        </ul>
+    }
+    else { <p>No assignment results.</p> }
+
+    <h4>Released Exam Results</h4>
+    @if (Model.ExamResults != null && Model.ExamResults.Any())
+    {
+        <ul>
+        @foreach(var er in Model.ExamResults)
+        {
+            <li>@er.Exam?.Title - @er.Score - Grade: @er.Grade</li>
+        }
+        </ul>
+    }
+    else { <p>No released exam results.</p> }
+}
+else
+{
+    <p>Student profile not found.</p>
+}

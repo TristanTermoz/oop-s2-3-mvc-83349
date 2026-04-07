@@ -1,0 +1,17 @@
+@model IEnumerable<VgcCollege.Models.CourseEnrolment>
+
+@{
+    ViewData["Title"] = "Manage Enrolments";
+}
+
+<h2>Enrolments</h2>
+<p><a asp-action="Create">Create new enrolment</a></p>
+<table class="table">
+    <thead><tr><th>Student</th><th>Course</th><th>Status</th></tr></thead>
+    <tbody>
+    @foreach(var e in Model)
+    {
+        <tr><td>@e.Student?.Name</td><td>@e.Course?.Name</td><td>@e.Status</td></tr>
+    }
+    </tbody>
+</table>

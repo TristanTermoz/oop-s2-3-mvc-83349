@@ -1,0 +1,25 @@
+@{
+    ViewData["Title"] = "Create User";
+}
+
+<h2>Create User</h2>
+<form method="post">
+    @Html.AntiForgeryToken()
+    <div>
+        <label>Email</label>
+        <input name="email" />
+    </div>
+    <div>
+        <label>Password</label>
+        <input name="password" />
+    </div>
+    <div>
+        <label>Role</label>
+        <select name="role">
+            <option>Administrator</option>
+            <option>Faculty</option>
+            <option>Student</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>

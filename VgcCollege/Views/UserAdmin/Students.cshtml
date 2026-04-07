@@ -1,0 +1,22 @@
+@model IEnumerable<VgcCollege.Models.StudentProfile>
+
+@{
+    ViewData["Title"] = "Manage Students";
+}
+
+<h2>Students</h2>
+<p><a class="btn btn-primary" asp-action="CreateStudent">Create new student</a></p>
+<table class="table">
+    <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Actions</th></tr></thead>
+    <tbody>
+    @foreach(var s in Model)
+    {
+        <tr>
+            <td>@s.Name</td>
+            <td>@s.Email</td>
+            <td>@s.Phone</td>
+            <td><!-- future actions --></td>
+        </tr>
+    }
+    </tbody>
+</table>

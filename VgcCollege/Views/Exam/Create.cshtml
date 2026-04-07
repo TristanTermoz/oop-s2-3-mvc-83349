@@ -1,0 +1,27 @@
+@model VgcCollege.Models.Exam
+
+@{
+    ViewData["Title"] = "Create Exam";
+}
+
+<h2>Create Exam</h2>
+<form method="post">
+    @Html.AntiForgeryToken()
+    <div>
+        <label asp-for="Title"></label>
+        <input asp-for="Title" />
+    </div>
+    <div>
+        <label asp-for="CourseId">Course</label>
+        <select asp-for="CourseId" asp-items='@(new Microsoft.AspNetCore.Mvc.Rendering.SelectList((IEnumerable<VgcCollege.Models.Course>)ViewData["Courses"], "Id", "Name"))'></select>
+    </div>
+    <div>
+        <label asp-for="Date"></label>
+        <input asp-for="Date" type="date" />
+    </div>
+    <div>
+        <label asp-for="MaxScore"></label>
+        <input asp-for="MaxScore" />
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>

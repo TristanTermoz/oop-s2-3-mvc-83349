@@ -1,0 +1,30 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h2>Admin Dashboard</h2>
+<p>Administrators can manage branches, courses, enrolments, users and results.</p>
+
+@model VgcCollege.Models.AdminDashboardViewModel
+<div class="row">
+    <div class="col-md-4">
+        <h3>Branches</h3>
+        <p>@(Model.Branches?.Count() ?? 0) branches</p>
+        <p><a class="btn btn-primary" asp-controller="Branch" asp-action="Index">Manage Branches</a></p>
+    </div>
+    <div class="col-md-4">
+        <h3>Courses</h3>
+        <p>@(Model.Courses?.Count() ?? 0) courses</p>
+        <p><a class="btn btn-primary" asp-controller="Course" asp-action="Index">Manage Courses</a></p>
+    </div>
+    <div class="col-md-4">
+        <h3>People & Academic</h3>
+        <p>@(Model.StudentProfiles?.Count() ?? 0) students</p>
+        <p>@(Model.FacultyProfiles?.Count() ?? 0) faculty</p>
+        <p><a class="btn btn-primary" asp-controller="UserAdmin" asp-action="Index">Manage Users</a></p>
+        <p><a class="btn btn-primary" asp-controller="UserAdmin" asp-action="Students">Manage Students</a></p>
+        <p><a class="btn btn-primary" asp-controller="Enrolment" asp-action="Index">Manage Enrolments</a></p>
+        <p><a class="btn btn-primary" asp-controller="Assignment" asp-action="Index">Manage Assignments</a></p>
+        <p><a class="btn btn-primary" asp-controller="Exam" asp-action="Index">Manage Exams</a></p>
+    </div>
+</div>
