@@ -26,19 +26,21 @@ namespace VgcCollege.Controllers
         public async Task<IActionResult> Create()
         {
             ViewData["Branches"] = await _db.Branches.AsNoTracking().ToListAsync();
-            return View(new Course());
+            return View(new CourseCreateViewModel { StartDate = DateTime.Today, EndDate = DateTime.Today.AddMonths(6) });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Course model)
+        public async Task<IActionResult> Create(CourseCreateViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 ViewData["Branches"] = await _db.Branches.AsNoTracking().ToListAsync();
                 return View(model);
             }
-            _db.Courses.Add(model);
+
+            var course = new Course { Name = model.Name, BranchId = model.BranchId ?? 0, StartDate = model.StartDate, EndDate = model.EndDate };
+            _db.Courses.Add(course);
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

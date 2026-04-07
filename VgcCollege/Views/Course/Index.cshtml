@@ -5,16 +5,25 @@
 }
 
 <h2>Courses</h2>
-<p><a asp-action="Create">Create new course</a></p>
-<ul>
-@foreach(var c in Model)
-{
-    <li>@c.Name - Branch: @c.Branch?.Name - Faculty: @c.Faculty?.Name - <a asp-action="Edit" asp-route-id="@c.Id">Edit</a>
-        <form asp-action="Delete" method="post" style="display:inline">
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="id" value="@c.Id" />
-            <button type="submit" class="btn btn-link">Delete</button>
-        </form>
-    </li>
-}
-</ul>
+<p><a class="btn btn-primary" asp-action="Create">Create new course</a></p>
+<table class="table">
+    <thead><tr><th>Name</th><th>Branch</th><th>Faculty</th><th>Actions</th></tr></thead>
+    <tbody>
+    @foreach(var c in Model)
+    {
+        <tr>
+            <td>@c.Name</td>
+            <td>@c.Branch?.Name</td>
+            <td>@c.Faculty?.Name</td>
+            <td>
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@c.Id">Edit</a>
+                <form asp-action="Delete" method="post" style="display:inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@c.Id" />
+                    <button type="submit" class="btn btn-link">Delete</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
