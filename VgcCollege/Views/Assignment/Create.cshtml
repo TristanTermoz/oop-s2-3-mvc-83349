@@ -1,4 +1,4 @@
-@model VgcCollege.Models.Assignment
+@model VgcCollege.Models.AssignmentCreateViewModel
 
 @{
     ViewData["Title"] = "Create Assignment";
@@ -7,21 +7,29 @@
 <h2>Create Assignment</h2>
 <form method="post">
     @Html.AntiForgeryToken()
+    <div asp-validation-summary="All" class="text-danger"></div>
     <div>
         <label asp-for="Title"></label>
-        <input asp-for="Title" />
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
     </div>
     <div>
         <label asp-for="CourseId">Course</label>
-        <select asp-for="CourseId" asp-items='@(new Microsoft.AspNetCore.Mvc.Rendering.SelectList((IEnumerable<VgcCollege.Models.Course>)ViewData["Courses"], "Id", "Name"))'></select>
+        <select asp-for="CourseId" asp-items='@(new Microsoft.AspNetCore.Mvc.Rendering.SelectList((IEnumerable<VgcCollege.Models.Course>)ViewData["Courses"], "Id", "Name"))' class="form-control"></select>
     </div>
     <div>
         <label asp-for="MaxScore"></label>
-        <input asp-for="MaxScore" />
+        <input asp-for="MaxScore" class="form-control" />
+        <span asp-validation-for="MaxScore" class="text-danger"></span>
     </div>
     <div>
         <label asp-for="DueDate"></label>
-        <input asp-for="DueDate" type="date" />
+        <input asp-for="DueDate" type="date" class="form-control" />
+        <span asp-validation-for="DueDate" class="text-danger"></span>
     </div>
     <button type="submit" class="btn btn-primary">Create</button>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

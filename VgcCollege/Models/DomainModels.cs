@@ -94,6 +94,7 @@ namespace VgcCollege.Models
         public int StudentProfileId { get; set; }
         public StudentProfile Student { get; set; }
 
+        [Display(Name = "Course")]
         public int CourseId { get; set; }
         public Course Course { get; set; }
 
@@ -124,17 +125,18 @@ namespace VgcCollege.Models
         public int Id { get; set; }
 
         public int CourseId { get; set; }
-        public Course Course { get; set; }
+        public Course? Course { get; set; }
 
         [Required, StringLength(200)]
         public string Title { get; set; }
 
+        [Display(Name = "Max Score")]
         public decimal MaxScore { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime DueDate { get; set; }
 
-        public ICollection<AssignmentResult> Results { get; set; }
+        public ICollection<AssignmentResult>? Results { get; set; }
     }
 
     public class AssignmentResult
@@ -157,7 +159,7 @@ namespace VgcCollege.Models
         public int Id { get; set; }
 
         public int CourseId { get; set; }
-        public Course Course { get; set; }
+        public Course? Course { get; set; }
 
         [Required, StringLength(200)]
         public string Title { get; set; }
@@ -169,7 +171,7 @@ namespace VgcCollege.Models
 
         public bool ResultsReleased { get; set; }
 
-        public ICollection<ExamResult> Results { get; set; }
+        public ICollection<ExamResult>? Results { get; set; }
     }
 
     public class ExamResult

@@ -1,22 +1,60 @@
-name: ci
+name: CI and Deploy
+
 on:
   push:
-    branches: [ "master" ]
+    branches: [ 'master' ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ 'master' ]
+  workflow_dispatch: {}
+
 jobs:
-  build-and-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: "8.0.x"
-      - name: Restore
-        run: dotnet restore
-      - name: Build (Release)
-        run: dotnet build --configuration Release --no-restore
-      - name: Test
-        run: dotnet test --configuration Release --no-build --verbosity normal
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Restore
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Test
+      run: dotnet test --configuration Release --no-build --verbosity normal
+
+    - name: Publish site
+      run: dotnet publish VgcCollege/VgcCollege.csproj -c Release -o ./publish
+
+    - name: Upload published artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: vgccollege-publish
+        path: ./publish
+
+    - name: Deploy to server via rsync (optional)
+      if: ${{ secrets.SSH_PRIVATE_KEY != '' && secrets.SSH_HOST != '' && secrets.SSH_USER != '' && secrets.SSH_TARGET_PATH != '' }}
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Rsync publish to target (optional)
+      if: ${{ secrets.SSH_PRIVATE_KEY != '' && secrets.SSH_HOST != '' && secrets.SSH_USER != '' && secrets.SSH_TARGET_PATH != '' }}
+      env:
+        SSH_HOST: ${{ secrets.SSH_HOST }}
+        SSH_USER: ${{ secrets.SSH_USER }}
+        SSH_TARGET_PATH: ${{ secrets.SSH_TARGET_PATH }}
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
+        rsync -avz --delete ./publish/ "$SSH_USER"@"$SSH_HOST":"$SSH_TARGET_PATH"
+
+    - name: Deployment notice
+      run: |
+        echo "Publish artifact uploaded. To enable automatic deploy, set the following repository secrets: SSH_PRIVATE_KEY, SSH_HOST, SSH_USER, SSH_TARGET_PATH"
