@@ -38,22 +38,19 @@ jobs:
         name: vgccollege-publish
         path: ./publish
 
-    - name: Deploy to server via rsync (optional)
-      if: ${{ secrets.SSH_PRIVATE_KEY != '' && secrets.SSH_HOST != '' && secrets.SSH_USER != '' && secrets.SSH_TARGET_PATH != '' }}
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-    - name: Rsync publish to target (optional)
-      if: ${{ secrets.SSH_PRIVATE_KEY != '' && secrets.SSH_HOST != '' && secrets.SSH_USER != '' && secrets.SSH_TARGET_PATH != '' }}
-      env:
-        SSH_HOST: ${{ secrets.SSH_HOST }}
-        SSH_USER: ${{ secrets.SSH_USER }}
-        SSH_TARGET_PATH: ${{ secrets.SSH_TARGET_PATH }}
+    - name: Optional rsync deploy (runs only when secrets are set)
       run: |
+        if [ -z "${{ secrets.SSH_PRIVATE_KEY }}" ] || [ -z "${{ secrets.SSH_HOST }}" ] || [ -z "${{ secrets.SSH_USER }}" ] || [ -z "${{ secrets.SSH_TARGET_PATH }}" ]; then
+          echo "SSH deploy secrets not set; skipping deploy"
+          exit 0
+        fi
         mkdir -p ~/.ssh
-        ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
-        rsync -avz --delete ./publish/ "$SSH_USER"@"$SSH_HOST":"$SSH_TARGET_PATH"
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+        chmod 600 ~/.ssh/deploy_key
+        eval "$(ssh-agent -s)"
+        ssh-add ~/.ssh/deploy_key
+        ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+        rsync -avz --delete ./publish/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_TARGET_PATH }}"
 
     - name: Deployment notice
       run: |
