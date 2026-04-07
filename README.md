@@ -12,6 +12,7 @@ Seeded demo accounts
 - Admin: `admin@vgc.local` / `Admin123!` (Administrator)
 - Faculty: `faculty@vgc.local` / `Faculty123!` (Faculty)
 - Student: `student@vgc.local` / `Student123!` (Student)
+- Student2: `student2@vgc.local` / `Student123!` (Student)
 
 Tests
 - Tests are in `tests/VgcCollege.Tests`. Run `dotnet test` from repo root.
